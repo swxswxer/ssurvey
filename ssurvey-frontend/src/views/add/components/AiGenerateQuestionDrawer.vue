@@ -135,7 +135,10 @@ const handleSSESubmit = async () => {
   const eventSource = new EventSource(
     // todo 手动填写完整的后端地址
     "http://localhost:8101/api/question/ai_generate/sse" +
-    `?appId=${props.appId}&optionNumber=${form.optionNumber}&questionNumber=${form.questionNumber}`
+    `?appId=${props.appId}&optionNumber=${form.optionNumber}&questionNumber=${form.questionNumber}`,
+    {
+      withCredentials: true,
+    }
   );
   let first = true;
   // 接收消息

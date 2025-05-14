@@ -5,6 +5,14 @@ declare namespace API {
     questionNumber?: number;
   };
 
+  type aiGenerateQuestionSSETestUsingGETParams = {
+    appId?: number;
+    optionNumber?: number;
+    questionNumber?: number;
+    /** isVip */
+    isVip?: boolean;
+  };
+
   type aiGenerateQuestionSSEUsingGETParams = {
     appId?: number;
     optionNumber?: number;
@@ -134,9 +142,9 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseListQuestionContentDto_ = {
+  type BaseResponseListQuestionContentDTO_ = {
     code?: number;
-    data?: QuestionContentDto[];
+    data?: QuestionContentDTO[];
     message?: string;
   };
 
@@ -581,17 +589,17 @@ declare namespace API {
 
   type QuestionAddRequest = {
     appId?: number;
-    questionContent?: QuestionContentDto[];
+    questionContent?: QuestionContentDTO[];
   };
 
-  type QuestionContentDto = {
+  type QuestionContentDTO = {
     options?: Option[];
     title?: string;
   };
 
   type QuestionEditRequest = {
     id?: number;
-    questionContent?: QuestionContentDto[];
+    questionContent?: QuestionContentDTO[];
   };
 
   type QuestionQueryRequest = {
@@ -608,14 +616,14 @@ declare namespace API {
 
   type QuestionUpdateRequest = {
     id?: number;
-    questionContent?: QuestionContentDto[];
+    questionContent?: QuestionContentDTO[];
   };
 
   type QuestionVO = {
     appId?: number;
     createTime?: string;
     id?: number;
-    questionContent?: QuestionContentDto[];
+    questionContent?: QuestionContentDTO[];
     updateTime?: string;
     user?: UserVO;
     userId?: number;
@@ -762,7 +770,6 @@ declare namespace API {
     appId?: number;
     appType?: number;
     choices?: string;
-    createTime?: string;
     current?: number;
     id?: number;
     notId?: number;
@@ -776,7 +783,6 @@ declare namespace API {
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
-    updateTime?: string;
     userId?: number;
   };
 

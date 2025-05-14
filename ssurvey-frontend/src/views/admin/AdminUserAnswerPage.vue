@@ -76,8 +76,8 @@
 <script setup lang="ts">
 import { ref, watchEffect } from "vue";
 import {
-  deleteuserAnswerUsingPost,
-  listuserAnswerByPageUsingPost,
+  deleteUserAnswerUsingPost,
+  listUserAnswerByPageUsingPost
 } from "@/api/userAnswerController";
 import API from "@/api";
 import message from "@arco-design/web-vue/es/message";
@@ -89,11 +89,11 @@ const formSearchParams = ref<API.UserAnswerQueryRequest>({});
 // 初始化搜索条件（不应该被修改）
 const initSearchParams = {
   current: 1,
-  pageSize: 10,
+  pageSize: 10
 };
 
 const searchParams = ref<API.UserAnswerQueryRequest>({
-  ...initSearchParams,
+  ...initSearchParams
 });
 const dataList = ref<API.UserAnswer[]>([]);
 const total = ref<number>(0);
@@ -102,7 +102,7 @@ const total = ref<number>(0);
  * 加载数据
  */
 const loadData = async () => {
-  const res = await listuserAnswerByPageUsingPost(searchParams.value);
+  const res = await listUserAnswerByPageUsingPost(searchParams.value);
   if (res.data.code === 0) {
     dataList.value = res.data.data?.records || [];
     total.value = res.data.data?.total || 0;
@@ -117,7 +117,7 @@ const loadData = async () => {
 const doSearch = () => {
   searchParams.value = {
     ...initSearchParams,
-    ...formSearchParams.value,
+    ...formSearchParams.value
   };
 };
 
@@ -128,7 +128,7 @@ const doSearch = () => {
 const onPageChange = (page: number) => {
   searchParams.value = {
     ...searchParams.value,
-    current: page,
+    current: page
   };
 };
 
@@ -141,8 +141,8 @@ const doDelete = async (record: API.UserAnswer) => {
     return;
   }
 
-  const res = await deleteuserAnswerUsingPost({
-    id: record.id,
+  const res = await deleteUserAnswerUsingPost({
+    id: record.id
   });
   if (res.data.code === 0) {
     loadData();
@@ -162,64 +162,64 @@ watchEffect(() => {
 const columns = [
   {
     title: "id",
-    dataIndex: "id",
+    dataIndex: "id"
   },
   {
     title: "选项",
-    dataIndex: "choices",
+    dataIndex: "choices"
   },
   {
     title: "结果 id",
-    dataIndex: "resultId",
+    dataIndex: "resultId"
   },
   {
     title: "名称",
-    dataIndex: "resultName",
+    dataIndex: "resultName"
   },
   {
     title: "描述",
-    dataIndex: "resultDesc",
+    dataIndex: "resultDesc"
   },
   {
     title: "图片",
     dataIndex: "resultPicture",
-    slotName: "resultPicture",
+    slotName: "resultPicture"
   },
   {
     title: "得分",
-    dataIndex: "resultScore",
+    dataIndex: "resultScore"
   },
   {
     title: "应用 id",
-    dataIndex: "appId",
+    dataIndex: "appId"
   },
   {
     title: "应用类型",
     dataIndex: "appType",
-    slotName: "appType",
+    slotName: "appType"
   },
   {
     title: "评分策略",
     dataIndex: "scoringStrategy",
-    slotName: "scoringStrategy",
+    slotName: "scoringStrategy"
   },
   {
     title: "用户 id",
-    dataIndex: "userId",
+    dataIndex: "userId"
   },
   {
     title: "创建时间",
     dataIndex: "createTime",
-    slotName: "createTime",
+    slotName: "createTime"
   },
   {
     title: "更新时间",
     dataIndex: "updateTime",
-    slotName: "updateTime",
+    slotName: "updateTime"
   },
   {
     title: "操作",
-    slotName: "optional",
-  },
+    slotName: "optional"
+  }
 ];
 </script>
