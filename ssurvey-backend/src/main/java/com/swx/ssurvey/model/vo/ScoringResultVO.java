@@ -13,7 +13,7 @@ import java.util.List;
  * 评分结果视图
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 @Data
 public class ScoringResultVO implements Serializable {

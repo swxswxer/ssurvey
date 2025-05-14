@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * App 应用类型枚举
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 public enum AppTypeEnum {
 

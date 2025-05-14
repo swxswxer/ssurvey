@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 题目接口
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 @RestController
 @RequestMapping("/question")

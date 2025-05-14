@@ -9,7 +9,7 @@ import java.util.List;
  * 更新评分结果请求
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 @Data
 public class ScoringResultUpdateRequest implements Serializable {

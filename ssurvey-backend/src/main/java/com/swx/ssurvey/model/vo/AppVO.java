@@ -11,7 +11,7 @@ import java.util.Date;
  * 应用视图
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 @Data
 public class AppVO implements Serializable {

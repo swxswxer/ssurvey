@@ -28,7 +28,7 @@ import java.util.Date;
  * 应用接口
  *
  * @author   swxswx
- * @from <a href="https://www.code-nav.cn">编程导航学习圈</a>
+ *  
  */
 @RestController
 @RequestMapping("/app")
