@@ -349,7 +349,7 @@ public class QuestionController {
         User loginUser = userService.getLoginUser(request);
         // 默认全局线程池
         Scheduler scheduler = Schedulers.io();
-        if ("vip".equals(loginUser.getUserRole())) {
+        if ("admin".equals(loginUser.getUserRole())) {
             scheduler = vipScheduler;
         }
         modelDataFlowable

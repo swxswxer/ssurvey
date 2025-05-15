@@ -130,6 +130,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--https://help.aliyun.com/zh/oss/getting-started/oss-sdk-quick-start?spm=a2c4g.11186623.help-menu-31815.d_3_5.329b1a9c5fhxqv-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.17.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

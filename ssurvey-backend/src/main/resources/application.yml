@@ -13,19 +13,16 @@ spring:
       matching-strategy: ant_path_matcher
   # session 配置
   session:
-    # todo 取消注释开启分布式 session（须先配置 Redis）
-    # store-type: redis
+    store-type: redis
     # 30 天过期
     timeout: 2592000
   # 数据库配置
-  # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://10.15.25.11:3306/ssurvey
     username: swxswxer
     password: FMkZqdYDfKW3
   # Redis 配置
-  # todo 需替换配置，然后取消注释
   redis:
     database: 1
     host: 10.15.25.11
@@ -88,7 +85,6 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
 # 对象存储
-# todo 需替换配置
 cos:
   client:
     accessKey: xxx
@@ -110,4 +106,7 @@ knife4j:
 ai:
   apiKey: 554b57ea3fce46c2b7329081d88937eb.a3OsmrVHdKuXhC81
 
-
+oss:
+  endpoint: https://oss-cn-shenzhen.aliyuncs.com
+  accessKeyId: LTAI5tLR8eTdV8A8qAo1gdYo
+  accessKeySecret: IccUhWX6bHnCGYdbatXgsBrJLtBEMN

@@ -1,5 +1,6 @@
 package com.swx.ssurvey.manager;
 
+import com.alibaba.fastjson.JSON;
 import com.swx.ssurvey.common.ErrorCode;
 import com.swx.ssurvey.exception.BusinessException;
 import com.zhipu.oapi.ClientV4;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -147,4 +149,110 @@ public class AiManager {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, e.getMessage());
         }
     }
+
+    /**
+     * 通用同步请求(图片)
+     *
+     * @param messages
+     * @param stream
+     * @param temperature
+     * @return
+     */
+    public String doImagesRequest(List<ChatMessage> messages, Boolean stream, Float temperature) {
+        // 构建请求
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                .model(Constants.ModelCogView)
+                .stream(stream)
+                .temperature(temperature)
+                .invokeMethod(Constants.invokeMethod)
+                .messages(messages)
+                .build();
+        try {
+            ModelApiResponse invokeModelApiResp = clientV4.invokeModelApi(chatCompletionRequest);
+            ArrayList content = (ArrayList) invokeModelApiResp.getData().getChoices().get(0).getMessage().getContent();
+            LinkedHashMap linkedHashMap = (LinkedHashMap) content.get(0);
+            return linkedHashMap.get("url").toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, e.getMessage());
+        }
+    }
+
+
+    /**
+     * 同步简化请求(图片)
+     *
+     * @return
+     */
+    public String doImagesRequest(String systemMessage, String userMessage) {
+        List<ChatMessage> chatMessageList = new ArrayList<>();
+        ChatMessage systemChatMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), systemMessage);
+        chatMessageList.add(systemChatMessage);
+        ChatMessage userChatMessage = new ChatMessage(ChatMessageRole.USER.value(), userMessage);
+        chatMessageList.add(userChatMessage);
+
+        return doImagesRequest(chatMessageList, Boolean.FALSE, STABLE_TEMPERATURE);
+    }
+
+
+    /**
+     * 通用异步请求(文字)
+     *
+     * @param stream
+     * @param temperature
+     * @return
+     */
+    public String doAsyncRequest(String systemMessage, String userMessage, Boolean stream, Float temperature) {
+        List<ChatMessage> chatMessageList = new ArrayList<>();
+        ChatMessage systemChatMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), systemMessage);
+        chatMessageList.add(systemChatMessage);
+        ChatMessage userChatMessage = new ChatMessage(ChatMessageRole.USER.value(), userMessage);
+        chatMessageList.add(userChatMessage);
+
+        // 构建请求
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                .model(Constants.ModelChatGLM4)
+                .stream(stream)
+                .temperature(temperature)
+                .invokeMethod(Constants.invokeMethodAsync)
+                .messages(chatMessageList)
+                .build();
+
+        ModelApiResponse invokeModelApiResp = clientV4.invokeModelApi(chatCompletionRequest);
+        System.out.println("model output:" + JSON.toJSONString(invokeModelApiResp));
+        return invokeModelApiResp.getData().getTaskId();
+
+    }
+
+
+    /**
+     * 通用异步请求(图片)
+     *
+     * @param stream
+     * @param temperature
+     * @return
+     */
+    public String doAsyncImageRequest(String systemMessage, String userMessage, Boolean stream, Float temperature) {
+        List<ChatMessage> chatMessageList = new ArrayList<>();
+        ChatMessage systemChatMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), systemMessage);
+        chatMessageList.add(systemChatMessage);
+        ChatMessage userChatMessage = new ChatMessage(ChatMessageRole.USER.value(), userMessage);
+        chatMessageList.add(userChatMessage);
+
+        // 构建请求
+        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                .model(Constants.ModelCogView)
+                .stream(stream)
+                .temperature(temperature)
+                .invokeMethod(Constants.invokeMethodAsync)
+                .messages(chatMessageList)
+                .build();
+
+        ModelApiResponse invokeModelApiResp = clientV4.invokeModelApi(chatCompletionRequest);
+        System.out.println("model output:" + JSON.toJSONString(invokeModelApiResp));
+        return invokeModelApiResp.getData().getTaskId();
+
+    }
+
+
 }

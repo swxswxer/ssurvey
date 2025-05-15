@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author   swxswx
  *   
  */
-// todo 如需开启 Redis，须移除 exclude 中的内容
+
 @SpringBootApplication
 @MapperScan("com.swx.ssurvey.mapper")
 @EnableScheduling

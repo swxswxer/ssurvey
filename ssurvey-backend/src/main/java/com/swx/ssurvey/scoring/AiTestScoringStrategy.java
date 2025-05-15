@@ -1,12 +1,15 @@
 package com.swx.ssurvey.scoring;
 
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.swx.ssurvey.manager.AiManager;
+import com.swx.ssurvey.manager.OssManager;
 import com.swx.ssurvey.model.dto.question.QuestionAnswerDTO;
 import com.swx.ssurvey.model.dto.question.QuestionContentDTO;
 import com.swx.ssurvey.model.entity.App;
@@ -40,13 +43,16 @@ public class AiTestScoringStrategy implements ScoringStrategy {
     @Resource
     private RedissonClient redissonClient;
 
+    @Resource
+    private OssManager ossManager;
+
     // 分布式锁的 key
     private static final String AI_ANSWER_LOCK = "AI_ANSWER_LOCK";
 
     /**
      * AI 评分结果本地缓存
      */
-    private final Cache<String, String> answerCacheMap =
+    private final Cache<String, UserAnswer> answerCacheMap =
             Caffeine.newBuilder().initialCapacity(1024)
                     // 缓存 5 分钟移除
                     .expireAfterAccess(5L, TimeUnit.MINUTES)
@@ -75,16 +81,10 @@ public class AiTestScoringStrategy implements ScoringStrategy {
         Long appId = app.getId();
         String jsonStr = JSONUtil.toJsonStr(choices);
         String cacheKey = buildCacheKey(appId, jsonStr);
-        String answerJson = answerCacheMap.getIfPresent(cacheKey);
+        UserAnswer userAnswerCache = answerCacheMap.getIfPresent(cacheKey);
         // 如果有缓存，直接返回
-        if (StrUtil.isNotBlank(answerJson)) {
-            // 构造返回值，填充答案对象的属性
-            UserAnswer userAnswer = JSONUtil.toBean(answerJson, UserAnswer.class);
-            userAnswer.setAppId(appId);
-            userAnswer.setAppType(app.getAppType());
-            userAnswer.setScoringStrategy(app.getScoringStrategy());
-            userAnswer.setChoices(jsonStr);
-            return userAnswer;
+        if (ObjUtil.isNotEmpty(userAnswerCache)) {
+            return userAnswerCache;
         }
 
         // 定义锁
@@ -107,22 +107,30 @@ public class AiTestScoringStrategy implements ScoringStrategy {
             // 2. 调用 AI 获取结果
             // 封装 Prompt
             String userMessage = getAiTestScoringUserMessage(app, questionContent, choices);
-            // AI 生成
+            // AI 生成评分
             String result = aiManager.doSyncStableRequest(AI_TEST_SCORING_SYSTEM_MESSAGE, userMessage);
+
+
             // 截取需要的 JSON 信息
             int start = result.indexOf("{");
             int end = result.lastIndexOf("}");
             String json = result.substring(start, end + 1);
+            // AI 生成图片
+            String imageUrl = AIGenerateImage(json);
+            //存入oss
+            String ossUrl = ossManager.uploadImageInOss("swxswx-oss", imageUrl);
 
-            // 缓存结果
-            answerCacheMap.put(cacheKey, json);
+
 
             // 3. 构造返回值，填充答案对象的属性
             UserAnswer userAnswer = JSONUtil.toBean(json, UserAnswer.class);
             userAnswer.setAppId(appId);
             userAnswer.setAppType(app.getAppType());
+            userAnswer.setResultPicture(ossUrl);
             userAnswer.setScoringStrategy(app.getScoringStrategy());
             userAnswer.setChoices(jsonStr);
+            // 缓存结果
+            answerCacheMap.put(cacheKey, userAnswer);
             return userAnswer;
         } finally {
             if (lock != null && lock.isLocked()) {
@@ -155,6 +163,21 @@ public class AiTestScoringStrategy implements ScoringStrategy {
         }
         userMessage.append(JSONUtil.toJsonStr(questionAnswerDTOList));
         return userMessage.toString();
+    }
+
+    private String AIGenerateImage(String userMessage){
+        String systemMessage = "你是一位专业的插画画师，我会给你如下信息：\n" +
+                "```\n" +
+                "评价名称，\n" +
+                "【【【评价描述】】】 \n" +
+                "```\n" +
+                "请你更具上述信息，按照以下步骤来画一个答题平台的评价插图，\n" +
+                "1.要求：图片风格必须为卡通风格，图片内容尽量贴近哦家名称和评价描述\n" +
+                "2.再次检查图片风格是否为卡通风格";
+        String imageUrl = aiManager.doImagesRequest(systemMessage, userMessage);
+//        JSONObject json = JSONUtil.parseObj(jsonStrImage);
+//        String imageUrl = json.getByPath("message.content[0].url").toString();
+        return imageUrl;
     }
 
 
