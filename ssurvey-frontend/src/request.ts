@@ -3,7 +3,7 @@ import { Message } from "@arco-design/web-vue";
 
 const myAxios = axios.create({
   baseURL: "http://localhost:8101",
-  timeout: 60000,
+  timeout: 120000,
   withCredentials: true,
 });
 
