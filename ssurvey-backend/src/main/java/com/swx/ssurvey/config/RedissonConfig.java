@@ -15,21 +15,26 @@ import org.springframework.context.annotation.Configuration;
 public class RedissonConfig {
 
 
-    private String host;
+    private String host = "10.15.25.11";
 
-    private Integer port;
+    private Integer port = 6379;
 
-    private Integer database;
+    private Integer database = 0;
 
     private String password;
 
     @Bean
     public RedissonClient redissonClient() {
+
+         // 打印配置信息
+       System.out.println("Redis host: " + host);
+       System.out.println("Redis port: " + port);
         Config config = new Config();
         config.useSingleServer()
                 .setAddress("redis://" + host + ":" + port)
                 .setDatabase(database)
                 .setPassword(password);
+                
         return Redisson.create(config);
     }
 }
