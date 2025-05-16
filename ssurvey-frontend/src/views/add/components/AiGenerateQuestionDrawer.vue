@@ -63,6 +63,7 @@ import { defineProps, reactive, ref, withDefaults } from "vue";
 import API from "@/api";
 import { aiGenerateQuestionUsingPost } from "@/api/questionController";
 import message from "@arco-design/web-vue/es/message";
+import myAxios from "@/request";
 
 interface Props {
   appId: string;
@@ -133,8 +134,8 @@ const handleSSESubmit = async () => {
   sseSubmitting.value = true;
   // 创建 SSE 请求
   const eventSource = new EventSource(
-    // todo 手动填写完整的后端地址
-    "http://localhost:8101/api/question/ai_generate/sse" +
+    // 使用myAxios中的baseURL替代硬编码的URL
+    `${myAxios.defaults.baseURL}/api/question/ai_generate/sse` +
     `?appId=${props.appId}&optionNumber=${form.optionNumber}&questionNumber=${form.questionNumber}`,
     {
       withCredentials: true,
