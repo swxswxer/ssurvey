@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -64,6 +65,11 @@ public class OssManager {
 
         return null;
     }
+
+   public String putObject(String filepath, File file){
+        //TODO 未实现
+        return null;
+   }
 
     private static String generateRandomObjectName(String imageUrl) {
         // 1. 从URL中提取文件名（去掉查询参数）

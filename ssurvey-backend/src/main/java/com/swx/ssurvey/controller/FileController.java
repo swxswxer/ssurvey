@@ -6,7 +6,7 @@ import com.swx.ssurvey.common.ErrorCode;
 import com.swx.ssurvey.common.ResultUtils;
 import com.swx.ssurvey.constant.FileConstant;
 import com.swx.ssurvey.exception.BusinessException;
-import com.swx.ssurvey.manager.CosManager;
+import com.swx.ssurvey.manager.OssManager;
 import com.swx.ssurvey.model.dto.file.UploadFileRequest;
 import com.swx.ssurvey.model.entity.User;
 import com.swx.ssurvey.model.enums.FileUploadBizEnum;
@@ -38,7 +38,7 @@ public class FileController {
     private UserService userService;
 
     @Resource
-    private CosManager cosManager;
+    private OssManager ossManager;
 
     /**
      * 文件上传
@@ -67,7 +67,7 @@ public class FileController {
             // 上传文件
             file = File.createTempFile(filepath, null);
             multipartFile.transferTo(file);
-            cosManager.putObject(filepath, file);
+            ossManager.putObject(filepath, file);
             // 返回可访问地址
             return ResultUtils.success(FileConstant.COS_HOST + filepath);
         } catch (Exception e) {
