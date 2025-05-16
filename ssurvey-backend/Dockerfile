@@ -25,8 +25,10 @@ RUN mvn package -DskipTests
 # 第二阶段：创建最终镜像
 FROM openjdk:8-jre-slim
 
+
 # 设置工作目录
 WORKDIR /app
+
 
 
 # 创建目录 - 如果需要挂载数据卷
@@ -39,4 +41,4 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8101
 
 # 启动命令
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
