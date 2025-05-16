@@ -40,4 +40,4 @@ COPY --from=build /app/target/*.jar app.jar
 # 暴露应用程序端口
 EXPOSE 8101
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-Dspring.redis.host=10.15.25.11", "-Dspring.redis.port=6379", "-Dspring.redis.database=0", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "app.jar"]

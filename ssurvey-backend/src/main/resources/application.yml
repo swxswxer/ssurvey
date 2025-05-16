@@ -106,9 +106,9 @@ knife4j:
           - com.swx.ssurvey.controller
 # AI 配置
 ai:
-  apiKey: 554b57ea3fce46c2b7329081d88937eb.a3OsmrVHdKuXhC81
-
+  apiKey: ${AI_API_KEY}
+# 阿里云OSS配置
 oss:
   endpoint: https://oss-cn-shenzhen.aliyuncs.com
-  accessKeyId: LTAI5tLR8eTdV8A8qAo1gdYo
-  accessKeySecret: IccUhWX6bHnCGYdbatXgsBrJLtBEMN
+  accessKeyId: ${OSS_ACCESS_KEY_ID}
+  accessKeySecret: ${OSS_ACCESS_KEY_SECRET}
