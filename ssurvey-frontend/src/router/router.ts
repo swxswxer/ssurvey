@@ -20,12 +20,99 @@ import DoAnswerPage from "@/views/answer/DoAnswerPage.vue";
 import MyAnswerPage from "@/views/answer/MyAnswerPage.vue";
 import AppStatisticPage from "@/views/statistic/AppStatisticPage.vue";
 
+// 系统管理子菜单项路由定义
+const adminSubMenuRoutes: Array<RouteRecordRaw> = [
+  {
+    path: "/admin/user",
+    name: "用户管理",
+    component: AdminUserPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      parentMenu: "/admin", // 标记父菜单路径
+    },
+  },
+  {
+    path: "/admin/app",
+    name: "应用管理",
+    component: AdminAppPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      parentMenu: "/admin", // 标记父菜单路径
+    },
+  },
+  {
+    path: "/admin/question",
+    name: "题目管理",
+    component: AdminQuestionPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      parentMenu: "/admin", // 标记父菜单路径
+    },
+  },
+  {
+    path: "/admin/scoring_result",
+    name: "评分管理",
+    component: AdminScoringResultPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      parentMenu: "/admin", // 标记父菜单路径
+    },
+  },
+  {
+    path: "/admin/user_answer",
+    name: "回答管理",
+    component: AdminUserAnswerPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      parentMenu: "/admin", // 标记父菜单路径
+    },
+  }
+];
+
+// 采用类型断言处理扩展的路由类型
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "主页",
     component: HomePage
   },
+  {
+    path: "/add/app",
+    name: "创建应用",
+    component: AddAppPage,
+  },
+  {
+    path: "/answer/my",
+    name: "我的答题",
+    component: MyAnswerPage,
+    meta: {
+      access: ACCESS_ENUM.USER,
+    },
+  },
+  // 系统管理折叠菜单（仅作为菜单项，不实际路由）
+  {
+    path: "/admin",
+    name: "系统管理",
+    component: HomeView,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+      isSubmenu: true,
+      hideInMenu: false,
+      subMenuItems: adminSubMenuRoutes, // 引用子菜单路由列表
+    },
+  },
+  // 将管理系统子菜单作为独立路由添加到主路由数组
+  ...adminSubMenuRoutes,
+  {
+    path: "/app_statistic",
+    name: "应用统计",
+    component: AppStatisticPage,
+    meta: {
+      access: ACCESS_ENUM.ADMIN,
+    },
+  },
+
+  //不在菜单中显示的路由
   {
     path: "/app/detail/:id",
     name: "应用详情",
@@ -35,11 +122,7 @@ export const routes: Array<RouteRecordRaw> = [
       hideInMenu: true,
     }
   },
-  {
-    path: "/add/app",
-    name: "创建应用",
-    component: AddAppPage,
-  },
+
   {
     path: "/add/app/:id",
     name: "修改应用",
@@ -87,15 +170,6 @@ export const routes: Array<RouteRecordRaw> = [
       access: ACCESS_ENUM.USER,
     },
   },
-  {
-    path: "/answer/my",
-    name: "我的答题",
-    component: MyAnswerPage,
-    meta: {
-      access: ACCESS_ENUM.USER,
-    },
-  },
-
 
   {
     path: "/noAuth",
@@ -106,47 +180,6 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
 
-
-  {
-    path: "/admin/user",
-    name: "用户管理",
-    component: AdminUserPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-  {
-    path: "/admin/app",
-    name: "应用管理",
-    component: AdminAppPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-  {
-    path: "/admin/question",
-    name: "题目管理",
-    component: AdminQuestionPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-  {
-    path: "/admin/scoring_result",
-    name: "评分管理",
-    component: AdminScoringResultPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-  {
-    path: "/admin/user_answer",
-    name: "回答管理",
-    component: AdminUserAnswerPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
   {
     path: "/user",
     name: "用户",
@@ -167,23 +200,6 @@ export const routes: Array<RouteRecordRaw> = [
       hideInMenu: true,
     }
   },
-  {
-    path: "/admin",
-    name: "管理页面",
-    component: HomeView,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-  {
-    path: "/app_statistic",
-    name: "应用统计",
-    component: AppStatisticPage,
-    meta: {
-      access: ACCESS_ENUM.ADMIN,
-    },
-  },
-
 
 ];
 

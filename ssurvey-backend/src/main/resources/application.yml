@@ -16,6 +16,8 @@ spring:
     store-type: redis
     # 30 天过期
     timeout: 2592000
+
+
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -74,7 +76,12 @@ server:
     # cookie 30 天过期
     session:
       cookie:
-        max-age: 2592000
+      #30天过期
+        max-age: 259200
+        #解决跨域 需要https证书
+#        same-site: none
+#        secure: true
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
