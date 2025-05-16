@@ -102,6 +102,4 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.swx.ssurvey.controller
-# AI 配置
-ai:
-  apiKey: 554b57ea3fce46c2b7329081d88937eb.a3OsmrVHdKuXhC81
+
